@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+@import url('https://fonts.googleapis.com/css?family=Catamaran:300,400,500');
+
+html, body {
+    font-family: Catamaran, Roboto, sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+    background-color: #fafafa;
+}
+
+#index-top {
+    height: 90vh;
+    width: 100%;
+    background-color: #0091EA;
+}
+
+.link-decoration, .link-decoration:hover {
+    text-decoration: none;
+}
