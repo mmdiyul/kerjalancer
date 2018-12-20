@@ -3,8 +3,9 @@
     
     session_start();
     
-    if (!isset($_SESSION['username']) && !isset($_SESSION['level'])) {
-        header("Location: ./index.php");
+    $iduser = $_GET["id"];
+
+    if (isset($_SESSION['username']) && isset($_SESSION['level'])) {
     }
 ?>
 <!DOCTYPE html>
@@ -18,6 +19,19 @@
     <div class="row mt-5 mb-5">
         <div class="col-2"></div>
         <div class="col-8 border shadow w-100 p-4 mt-4 mb-4 bg-white">
+            <?php
+                $resultuser = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM user WHERE id_user = '$iduser'"));
+                $profile_picture = $resultuser["profile_picture"];
+                $nama = $resultuser["name"];
+                $username = $resultuser["username"];
+                $email = $resultuser["email"];
+                $phone = $resultuser["phone"];
+                $desc = $resultuser["description"];
+                $daftar = date_create($resultuser['user_create_date']);
+                $update = date_create($resultuser['user_update_date']);
+                $level = $resultuser["level"];
+                $queryskill = mysqli_query($con, "SELECT us.*, s.* FROM user_has_skills AS us INNER JOIN skill AS s ON us.id_skill = s.id_skill WHERE us.id_user = '$iduser'");
+            ?>
             <h4>Profil</h4>
             <hr>
             <div class="row">
@@ -26,13 +40,6 @@
                     <h5><?=$nama?></h5>
                 </div>
                 <div class="col-9 border-left">
-                    <div class="w-100 d-flex justify-content-end">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editProfil">
-                            <i class="far fa-edit mr-2"></i>
-                            Edit Profil
-                        </button>
-                    </div>
-                    <hr>
                     <div class="row mt-3">
                         <div class="col-3">
                             <strong>Nama Lengkap</strong>
@@ -78,8 +85,7 @@
                         </div>
                     </div>
                     <?php
-                        $queryskill = mysqli_query($con, "SELECT us.*, s.* FROM user_has_skills AS us INNER JOIN skill AS s ON us.id_skill = s.id_skill WHERE us.id_user = '$id_user'");
-                        if ($_SESSION["level"] == 3) {
+                        if ($level == 3) {
                     ?>
                         <div class="row mt-3">
                             <div class="col-3">
@@ -142,76 +148,9 @@
         <div class="col-2"></div>
     </div>
 
-    <!-- Button trigger modal -->
-    <!-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#editProfil">
-      Launch
-    </button> -->
-    
-    <!-- Modal -->
-    <div class="modal fade" id="editProfil" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <form action="./process/edit-profil-process.php" method="post" enctype="multipart/form-data" >
-                    <div class="modal-header">
-                        <h5 class="modal-title">Edit Profil</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container">
-                            <input type="hidden" name="idprofil" value="<?=$id_user?>">
-                            <input type="hidden" name="pathfoto" value="<?=$profile_picture?>">
-                            <div class="form-group row">
-                                <label for="nama" class="col-2 text-right">Nama Lengkap</label>
-                                <input type="text" class="form-control col-10" name="nama" id="nama" value="<?=$nama?>" required>
-                            </div>
-                            <div class="form-group row">
-                                <label for="biodata" class="col-2 text-right">Biodata</label>
-                                <textarea class="form-control col-10" name="biodata" id="biodata" rows="10" required><?=$desc?></textarea>
-                            </div>
-                            <div class="form-group row">
-                                <label for="skill" class="col-2 text-right">Skill</label>
-                                <div class="col-10 form-control" style="height:200px; overflow-y: scroll;">
-                            <?php
-                                if ($_SESSION["level"] == 3) {
-                                    $queryselectskill = mysqli_query($con, "SELECT s.*, us.id_user, us.id_skill AS idskill FROM skill AS s LEFT JOIN user_has_skills AS us ON us.id_skill = s.id_skill");
-                                    while ($rowskill = mysqli_fetch_assoc($queryselectskill)) {
-                                        $idskill = $rowskill["id_skill"];
-                                        $namaskill = $rowskill["nama_skill"];
-                            ?>
-                                            <input type="checkbox" name="skill[]" id="skill" value="<?=$idskill?>" <?=$rowskill["idskill"] == $idskill ? 'checked="checked"' : '';?>> <?=$namaskill?> <br>
-                            <?php
-                                    }
-                                }
-                            ?>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="foto" class="col-2 text-right">Foto Profil</label>
-                                <div class="col-10">
-                                    <img src="<?=$profile_picture?>" alt="Foto Profil" class="mb-3" style="width: 130px;">
-                                    <input type="file" class="form-control" name="foto" id="foto" value="<?=$profile_picture?>">
-                                    <small class="text-danger">*) Ukuran maksimum 2Mb</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                        <input type="submit" name="submit" class="btn btn-primary" value="Simpan Perubahan">
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <?php include './lib/footer.php' ?>
 
     <?php include './lib/scripts.php'; ?>
-    <script>
-        
-    </script>
 </body>
 </html>
 <?php

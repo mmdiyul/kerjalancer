@@ -98,7 +98,7 @@
                             <img src="<?php echo $profile_picture; ?>" class="rounded rounded-circle" alt="foto profil" height="23px">
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownId">
-                            <a class="dropdown-item" href="./profil.php?id=<?=$id_user?>">
+                            <a class="dropdown-item" href="./profil.php">
                                 <div class="row">
                                     <div class="col-3">
                                         <i class="fas fa-user"></i>
@@ -143,9 +143,6 @@
                         <a class="nav-link text-dark" href="./portfolio.php">Portfolio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="./cari-kerja.php">Portfolio</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link text-dark" href="./portfolio-saya.php">Portfolio Saya</a>
                     </li>
                     <li class="nav-item dropdown">
@@ -169,7 +166,7 @@
                             <img src="<?php echo $profile_picture; ?>" class="rounded rounded-circle" alt="foto profil" height="23px">
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownId">
-                            <a class="dropdown-item" href="./profil.php?id=<?=$id_user?>">
+                            <a class="dropdown-item" href="./profil.php">
                                 <div class="row">
                                     <div class="col-3">
                                         <i class="fas fa-user"></i>

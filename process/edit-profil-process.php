@@ -8,6 +8,18 @@ if (isset($_POST['submit'])) {
     $foto = $_POST["pathfoto"];
     $waktusekarang = date('Y-m-d H:i:s');
     $code = $_FILES["foto"]["error"];
+    $skill = $_POST["skill"];
+    $queryskill = mysqli_query($con, "SELECT * FROM user_has_skills WHERE id_user = '$iduser'");
+    $querydeleteskill = "DELETE FROM user_has_skills WHERE id_user = '$iduser'";
+    mysqli_query($con, $querydeleteskill);
+    // while ($row = mysqli_fetch_assoc($queryskill)) {
+    //     echo $row["id_user"].$row["id_skill"];
+    // }
+    foreach ($skill as $s) {
+        $queryinsertskill = "INSERT INTO user_has_skills VALUES ('$iduser', '$s')";
+        mysqli_query($con, $queryinsertskill);
+    }
+
 
     // print_r($_FILES);die();
 

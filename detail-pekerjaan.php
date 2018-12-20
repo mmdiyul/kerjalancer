@@ -50,16 +50,22 @@
             $waktusekarang = date('Y-m-d H:i:s');
         ?>
             <div class="container-fluid shadow bg-white p-4 mb-3">
-                <div class="w-100 d-flex justify-content-end aligh-items-center">
-                    <strong class="text-danger">Silakan masuk untuk bisa melamar job. </strong> &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="./login.php" class="link-decoration">
-                        <button class="btn btn-primary btn-sm pl-5 pr-5">
-                            <i class="fas fa-sign-in-alt mr-2"></i>
-                            Masuk
-                        </button>
-                    </a>
-                </div>
-                <hr>
+                <?php
+                    if (!isset($_SESSION['level'])) {
+                ?>
+                        <div class="w-100 d-flex justify-content-end aligh-items-center">
+                            <strong class="text-danger">Silakan masuk untuk bisa melamar job. </strong> &nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="./login.php" class="link-decoration">
+                                <button class="btn btn-primary btn-sm pl-5 pr-5">
+                                    <i class="fas fa-sign-in-alt mr-2"></i>
+                                    Masuk
+                                </button>
+                            </a>
+                        </div>
+                        <hr>
+                <?php
+                    }
+                ?>
                 <div class="row d-flex flex-column justify-content-center align-items-center w-100">
                     <img src="<?=$category_image?>" alt="Gambar Category" style="width: 220px;">
                     <h3 class="text-primary"><?=$namapekerjaan?></h3>
@@ -83,6 +89,21 @@
                     <p>
                         <strong class="text-primary">Salary Pekerjaan : </strong> 
                         <strong>IDR</strong> <?=number_format($salary, 0, '.', ',')?> <br>
+                    </p>
+                    <p>
+                        <strong class="text-primary">Skill yang Dibutuhkan : </strong> 
+                    </p>
+                    <p class="container">
+                        <ul>
+                        <?php
+                            $queryskills = mysqli_query($con, "SELECT s.*, js.* FROM skill AS s INNER JOIN job_has_skills AS js ON s.id_skill = js.id_skill WHERE js.id_job = '$id_job'");
+                            while ($rowskills = mysqli_fetch_assoc($queryskills)) {
+                        ?>
+                                <li><?=$rowskills["nama_skill"]?></li>
+                        <?php
+                            }
+                        ?>
+                        </ul>
                     </p>
                     <p>
                         <strong class="text-primary">Deskripsi Pekerjaan : </strong> 

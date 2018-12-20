@@ -34,7 +34,7 @@
                 <h4>Daftar Pelamar</h4>
                 <hr>
                 <div class="container">
-                <table class="table table-hover">
+                <table class="table">
                     <thead class="thead-light">
                         <tr>
                             <th scope="col">#</th>
@@ -50,27 +50,31 @@
                                 $id_pelamar = $result['id_freelancer'];
                                 $namapelamar = $result['name'];
                                 $selectlamaran = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM applications WHERE id_freelancer = '$id_pelamar'"));
+                                $idlamaran = $selectlamaran["id_applications"];
                                 $deskripsi = $selectlamaran['description'];
                                 $dokumen = $selectlamaran['document'];
-                                $accepted = $result['accepted'];
+                                $accepted = $selectlamaran['accepted'];
                                 $numbering++;
                         ?>
-                                <form action="" method="post">
-                                    <tr style="cursor:pointer;" data-toggle="modal" data-target="#detailLamaran<?=$id_pelamar?>">
+                                <form action="./process/terima-tolak-lamaran-process.php" method="post">
+                                    <tr>
+                                        <input type="hidden" name="idlamaran" value="<?=$idlamaran?>">
+                                        <input type="hidden" name="idjob" value="<?=$id_job?>">
                                         <th scope="row"><?=$numbering?></th>
                                         <td><?=$namapelamar?></td>
                                         <td>
-                                            <a href="<?=$dokumen?>" class="linkdokumen-decoration">Lihat dokumen</a>
+                                            <a href="<?=$dokumen?>" class="link-decoration" target="_blank">Lihat dokumen</a>
                                         </td>
                                         <td>
+                                        <a href="#" data-toggle="modal" data-target="#detailLamaran<?=$id_pelamar?>" class="link-decoration btn btn-primary btn-sm pr-4 pl-4">Detail Lamaran</a>
                                         <?php
-                                            if ($accepted == 0) {
+                                            if ($accepted == '0') {
                                         ?>
-                                                <input class="btn btn-success btn-sm" name="accept" value="Terima">
+                                                <input type="submit" class="btn btn-success btn-sm pr-4 pl-4" name="accept" value="Terima">
                                         <?php
-                                            } else {
+                                            } else if ($accepted == '1') {
                                         ?>
-                                                <input class="btn btn-danger btn-sm" name="batal" value="Batal Terima">
+                                                <input type="submit" class="btn btn-danger btn-sm pr-4 pl-4" name="batal" value="Batal Terima">
                                         <?php
                                             }
                                         ?>

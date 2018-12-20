@@ -4,8 +4,10 @@
     session_start();
 
     if (isset($_SESSION['username']) && isset($_SESSION['level'])) {
-        
-    }
+        if ($_SESSION['level'] == 2) {
+            header("Location: ./list-pekerjaan-client.php");
+        }
+    } 
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -67,6 +67,21 @@
                             <label for="deskripsi" class="col-2 text-right">Deskripsi Pekerjaan</label>
                             <textarea class="form-control col-10" name="deskripsi" id="deskripsi" rows="10" placeholder="Jelaskan tentang kebutuhan anda. Misalnya, 'Saya membutuhkan aplikasi berbasis mobile dengan ketentuan sebagai berikut ...'" required></textarea>
                         </div>
+                        <div class="form-group row">
+                            <label for="deskripsi" class="col-2 text-right">Deskripsi Pekerjaan</label>
+                            <div class="col-10 form-control" style="height:200px; overflow-y: scroll;">
+                            <?php
+                                $queryselectskill = mysqli_query($con, "SELECT * FROM skill");
+                                while ($rowskill = mysqli_fetch_assoc($queryselectskill)) {
+                                    $idskill = $rowskill["id_skill"];
+                                    $namaskill = $rowskill["nama_skill"];
+                            ?>
+                                <input type="checkbox" name="skill[]" id="skill" value="<?=$idskill?>"> <?=$namaskill?> <br>
+                            <?php
+                                }
+                            ?>
+                            </div>
+                        </div>
                         <div class="form-group w-100 d-flex justify-content-end mt-4">
                             <input type="submit" name="submit" value="Tambah Pekerjaan" class="btn btn-success ">                        
                         </div>
@@ -98,6 +113,10 @@
                     <p>
                         <strong>Deskripsi Pekerjaan:</strong>
                         Diisi dengan deskripsi yang menjelaskan tentang pekerjaan dan kebutuhan-kebutuhan apa saja yang diperlukan dalam pekerjaan ini.
+                    </p>
+                    <p>
+                        <strong>Skill:</strong>
+                        Diisi dengan skill yang diprioritaskan harus dimiliki oleh freelancer.
                     </p>
                 </div>
             </div>

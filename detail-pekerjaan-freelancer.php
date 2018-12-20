@@ -112,6 +112,21 @@
                         <strong>IDR</strong> <?=number_format($salary, 0, '.', ',')?> <br>
                     </p>
                     <p>
+                        <strong class="text-primary">Skill yang Dibutuhkan : </strong> 
+                    </p>
+                    <p class="container">
+                        <ul>
+                        <?php
+                            $queryskills = mysqli_query($con, "SELECT s.*, js.* FROM skill AS s INNER JOIN job_has_skills AS js ON s.id_skill = js.id_skill WHERE js.id_job = '$id_job'");
+                            while ($rowskills = mysqli_fetch_assoc($queryskills)) {
+                        ?>
+                                <li><?=$rowskills["nama_skill"]?></li>
+                        <?php
+                            }
+                        ?>
+                        </ul>
+                    </p>
+                    <p>
                         <strong class="text-primary">Deskripsi Pekerjaan : </strong> 
                     </p>
                     <p class="container">
@@ -130,6 +145,31 @@
                     <small>Terdaftar di Kerjalancer pada :</small>
                     <span class="text-success"><?=$dateuser->format('D, d M Y')?></span>
                 </div>
+            </div>
+            <div class="container-fluid shadow bg-white p-4 mt-4">
+                <h5>Pelamar</h5>
+                <hr>
+                <table class="table">
+                    <tbody>
+                    <?php
+                        $queryambiluser = mysqli_query($con, "SELECT a.*, j.*, u.* FROM ((applications AS a INNER JOIN job AS j ON a.id_job = j.id_job) INNER JOIN user AS u ON a.id_freelancer = u.id_user) WHERE a.id_job = '$id_job'");
+                        $numbering = 1;
+                        if (mysqli_num_rows($queryambiluser)) {
+                            while ($ambiluser = mysqli_fetch_assoc($queryambiluser)) {
+                                $foto = $ambiluser["profile_picture"];
+                                $nama = $ambiluser["name"];
+                    ?>
+                        <tr>
+                            <td scope="col"><?=$numbering++?></td>
+                            <td scope="col"><img src="<?=$foto?>" alt="Foto Freelancer" width="20px"></td>
+                            <td><?=$nama?></td>
+                        </tr>
+                    <?php
+                            }
+                        }
+                    ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

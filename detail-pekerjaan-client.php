@@ -93,6 +93,21 @@
                         <strong>IDR</strong> <?=number_format($salary, 0, '.', ',')?> <br>
                     </p>
                     <p>
+                        <strong class="text-primary">Skill yang Dibutuhkan : </strong> 
+                    </p>
+                    <p class="container">
+                        <ul>
+                        <?php
+                            $queryskills = mysqli_query($con, "SELECT s.*, js.* FROM skill AS s INNER JOIN job_has_skills AS js ON s.id_skill = js.id_skill WHERE js.id_job = '$id_job'");
+                            while ($rowskills = mysqli_fetch_assoc($queryskills)) {
+                        ?>
+                                <li><?=$rowskills["nama_skill"]?></li>
+                        <?php
+                            }
+                        ?>
+                        </ul>
+                    </p>
+                    <p>
                         <strong class="text-primary">Deskripsi Pekerjaan : </strong> 
                     </p>
                     <p class="container">
