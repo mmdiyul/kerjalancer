@@ -3,6 +3,9 @@
 
     session_start();
 
+    $id = $_POST["id"];
+    echo $id;
+
     if (!isset($_SESSION['username']) && !isset($_SESSION['level'])) {
         
     }
@@ -22,7 +25,11 @@
             <hr>
             <div class="row mt-5">
             <?php
-                $queryportfolio = mysqli_query($con, "SELECT * FROM portfolio");
+                if (isset($_POST["submit"])) {
+                    $queryportfolio = mysqli_query($con, "SELECT * FROM portfolio WHERE id_user = '$id'");
+                } else {
+                    $queryportfolio = mysqli_query($con, "SELECT * FROM portfolio");
+                }
 
                 if (mysqli_num_rows($queryportfolio) > 0) {
                     while ($queryportfolioassoc = mysqli_fetch_assoc($queryportfolio)) {

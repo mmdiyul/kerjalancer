@@ -40,6 +40,18 @@
                     <h5><?=$nama?></h5>
                 </div>
                 <div class="col-9 border-left">
+                    <div class="w-100 d-flex justify-content-end">
+                        <!-- <a href="./portfolio.php?id=<?=$iduser?>" class="link-decoration"></a> -->
+                        <form action="./portfolio.php" method="post">
+                            <input type="hidden" name="id" value="<?=$iduser?>">
+                            <input type="submit" name="submit" class="btn btn-outline-primary" value="Lihat Portfolio">
+                        </form>
+                        <!-- <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#editProfil">
+                            <i class="far fa-eye mr-2"></i>
+                            Lihat Portfolio
+                        </button> -->
+                    </div>
+                    <hr>
                     <div class="row mt-3">
                         <div class="col-3">
                             <strong>Nama Lengkap</strong>

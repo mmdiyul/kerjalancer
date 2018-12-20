@@ -125,6 +125,44 @@
                     <span class="text-success"><?=$dateuser->format('D, d M Y')?></span>
                 </div>
             </div>
+            <div class="container-fluid shadow bg-white p-4 mt-4">
+                <h5>Pelamar</h5>
+                <hr>
+                <table class="table">
+                    <tbody>
+                    <?php
+                        $queryambiluser = mysqli_query($con, "SELECT a.*, j.*, u.* FROM ((applications AS a INNER JOIN job AS j ON a.id_job = j.id_job) INNER JOIN user AS u ON a.id_freelancer = u.id_user) WHERE a.id_job = '$id_job'");
+                        $numbering = 1;
+                        if (mysqli_num_rows($queryambiluser)) {
+                            while ($ambiluser = mysqli_fetch_assoc($queryambiluser)) {
+                                $foto = $ambiluser["profile_picture"];
+                                $nama = $ambiluser["name"];
+                                $idlamaran = $ambiluser["id_applications"];
+                                $accepted = $ambiluser["accepted"];
+                                if ($accepted == 1) {
+                    ?>
+                                    <tr class="text-primary">
+                                        <td scope="col"><?=$numbering++?></td>
+                                        <td scope="col"><img src="<?=$foto?>" alt="Foto Freelancer" width="20px"></td>
+                                        <td><?=$nama?></td>
+                                    </tr>
+                    <?php
+                                } else {
+                    ?>
+
+                                    <tr class="text-danger">
+                                        <td scope="col"><?=$numbering++?></td>
+                                        <td scope="col"><img src="<?=$foto?>" alt="Foto Freelancer" width="20px"></td>
+                                        <td><?=$nama?></td>
+                                    </tr>
+                    <?php
+                                }
+                            }
+                        }
+                    ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     

@@ -174,6 +174,23 @@
                                 <input type="number" class="form-control col-10" name="salary" id="salary" value="<?=$salary?>" required>
                             </div>
                             <div class="form-group row">
+                                <label for="skill" class="col-2 text-right">Skill</label>
+                                <div class="col-10 form-control" style="height:200px; overflow-y: scroll;">
+                            <?php
+                                // $queryselectskill = mysqli_query($con, "SELECT x.id_skill, x.nama_skill, t.id_job, t.idskill FROM skill AS x INNER JOIN (SELECT s.*, js.id_job, js.id_skill AS idskill FROM skill AS s LEFT JOIN job_has_skills AS js ON js.id_skill = s.id_skill) AS t WHERE t.id_job = 'id_job'");
+                                $queryselectskill = mysqli_query($con, "SELECT s.*, js.id_job, js.id_skill AS idskill FROM skill AS s LEFT JOIN job_has_skills AS js ON js.id_skill = s.id_skill AND js.id_job = '$id_job'");
+                                while ($rowskill = mysqli_fetch_assoc($queryselectskill)) {
+                                    $idskill = $rowskill["id_skill"];
+                                    $namaskill = $rowskill["nama_skill"];
+                                    $job = $rowskill["id_job"];
+                            ?>
+                                    <input type="checkbox" name="skill[]" id="skill" value="<?=$idskill?>" <?=$rowskill["idskill"] == $idskill && $job == $id_job ? 'checked="checked"' : '';?>> <?=$namaskill?> <br>
+                            <?php
+                                }
+                            ?>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="deskripsi" class="col-2 text-right">Deskripsi Pekerjaan</label>
                                 <textarea class="form-control col-10" name="deskripsi" id="deskripsi" rows="10" required><?=$deskripsi?></textarea>
                             </div>

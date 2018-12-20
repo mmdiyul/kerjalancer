@@ -49,12 +49,13 @@
                             while ($result = mysqli_fetch_assoc($selectpelamar)) {
                                 $id_pelamar = $result['id_freelancer'];
                                 $namapelamar = $result['name'];
-                                $selectlamaran = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM applications WHERE id_freelancer = '$id_pelamar'"));
+                                $selectlamaran = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM applications WHERE id_freelancer = '$id_pelamar' AND id_job = '$id_job'"));
                                 $idlamaran = $selectlamaran["id_applications"];
                                 $deskripsi = $selectlamaran['description'];
                                 $dokumen = $selectlamaran['document'];
                                 $accepted = $selectlamaran['accepted'];
                                 $numbering++;
+                                $skillcocok = mysqli_query($con, "SELECT us.*, js.* FROM user_has_skills AS us INNER JOIN job_has_skills AS js ON us.id_skill = js.id_skill WHERE js.id_job = '$id_job' AND us.id_user = '$id_pelamar'");
                         ?>
                                 <form action="./process/terima-tolak-lamaran-process.php" method="post">
                                     <tr>
@@ -96,6 +97,10 @@
                                                 <div class="container">
                                                     <div class="form-group row">
                                                         <strong for="deskripsi" class="col-2 text-right ">Lamaran :</strong>
+                                                        <p class="col-10"><?=$deskripsi?></p>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <strong for="deskripsi" class="col-2 text-right ">Skill yang cocok :</strong>
                                                         <p class="col-10"><?=$deskripsi?></p>
                                                     </div>
                                                     <div class="form-group row">
