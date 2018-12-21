@@ -48,7 +48,7 @@
             $salary = $row["job_salary"];
             $namaclient = $row["name"];
             $fotoclient = $row["profile_picture"];
-            $queryapplicant = mysqli_query($con, "SELECT COUNT(*) AS applicants FROM applications WHERE id_job = '$id_job'");
+            $queryapplicant = mysqli_query($con, "SELECT COUNT(*) AS applicants FROM applications INNER JOIN user ON applications.id_freelancer = user.id_user WHERE applications.id_job = '$id_job' AND user.flag = '1' AND applications.flag = '1'");
             $rowapplicant = mysqli_fetch_assoc($queryapplicant);
             $applicants = $rowapplicant['applicants'];
         ?>
@@ -64,6 +64,12 @@
                         <button class="btn btn-primary">
                             <i class="far fa-edit mr-2"></i>
                             Edit Job
+                        </button>
+                    </a>
+                    <a href="#" class="link-decoration" data-toggle="modal" data-target="#hapusJob">
+                        <button class="btn btn-danger ml-3">
+                            <i class="fas fa-trash mr-2"></i>
+                            Hapus Job
                         </button>
                     </a>
                 </div>
@@ -122,10 +128,56 @@
                 <hr>
                 <div class="row d-flex flex-column justify-content-center align-items-center">
                     <img src="<?=$fotoclient?>" alt="Gambar Category" class="rounded-circle mb-3" style="width: 120px; height: 120px;">
-                    <h5><?=$namaclient?></h5>
+                    <a href="./lihat-profil.php?id=<?=$idclient?>" class="link-decoration"><?=$namaclient?></a>
                     <small>Terdaftar di Kerjalancer pada :</small>
                     <span class="text-success"><?=$dateuser->format('D, d M Y')?></span>
                 </div>
+            </div>
+
+            <div class="container-fluid shadow bg-white p-4 mt-4">
+                <h5>Pelamar</h5>
+                <hr>
+                <span class="text-primary">*) Warna biru berarti diterima</span><br>
+                <span class="text-danger">*) Warna merah berarti tidak/belum diterima</span>
+                <table class="table">
+                    <tbody>
+                    <?php
+                        $queryambiluser = mysqli_query($con, "SELECT a.*, j.*, u.* FROM ((applications AS a INNER JOIN job AS j ON a.id_job = j.id_job) INNER JOIN user AS u ON a.id_freelancer = u.id_user) WHERE a.id_job = '$id_job' AND u.flag = '1' AND a.flag = '1'");
+                        $numbering = 1;
+                        if (mysqli_num_rows($queryambiluser)) {
+                            while ($ambiluser = mysqli_fetch_assoc($queryambiluser)) {
+                                $foto = $ambiluser["profile_picture"];
+                                $nama = $ambiluser["name"];
+                                $id = $ambiluser["id_user"];
+                                $idlamaran = $ambiluser["id_applications"];
+                                $accepted = $ambiluser["accepted"];
+                                if ($accepted == 1) {
+                    ?>
+                                    <tr class="text-primary">
+                                        <td scope="col"><?=$numbering++?></td>
+                                        <td scope="col"><img src="<?=$foto?>" alt="Foto Freelancer" width="20px"></td>
+                                        <td>
+                                            <a href="./lihat-profil.php?id=<?=$id?>" class="link-decoration"><?=$nama?></a>    
+                                        </td>
+                                    </tr>
+                    <?php
+                                } else {
+                    ?>
+
+                                    <tr class="text-danger">
+                                        <td scope="col"><?=$numbering++?></td>
+                                        <td scope="col"><img src="<?=$foto?>" alt="Foto Freelancer" width="20px"></td>
+                                        <td>
+                                            <a href="./lihat-profil.php?id=<?=$id?>" class="link-decoration text-danger"><?=$nama?></a>    
+                                        </td>
+                                    </tr>
+                    <?php
+                                }
+                            }
+                        }
+                    ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -199,6 +251,32 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                         <input type="submit" name='submit' class="btn btn-primary" value="Simpan Perubahan">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Hapus -->
+    <div class="modal fade" id="hapusJob" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <form action="./process/hapus-job-process.php" method="post" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Hapus Job</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <input type="hidden" name="idjob" value="<?=$id_job?>">
+                            Anda yakin ingin menghapus job ini? Terdapat <strong class="text-danger"><?=$applicants?></strong> pelamar pada job ini.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <input type="submit" name="submit" class="btn btn-danger" value="Hapus Job">
                     </div>
                 </form>
             </div>

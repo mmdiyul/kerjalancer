@@ -28,7 +28,7 @@
             $resultquery = mysqli_query($con, "SELECT u.id_user FROM user AS u INNER JOIN job AS j ON j.id_user = u.id_user WHERE u.username = '$username'");
             $rowusername = mysqli_fetch_assoc($resultquery);
             $id_user = $rowusername['id_user'];
-            $query = "SELECT j.*, c.*, u.* FROM ((job AS j INNER JOIN category AS c ON j.id_category = c.id_category) INNER JOIN user AS u ON j.id_user = u.id_user) WHERE j.id_user = '$id_user'";
+            $query = "SELECT j.*, c.*, u.* FROM ((job AS j INNER JOIN category AS c ON j.id_category = c.id_category) INNER JOIN user AS u ON j.id_user = u.id_user) WHERE j.id_user = '$id_user' AND u.flag = '1' AND j.flag = '1'";
             $result = mysqli_query($con, $query);
 
 
@@ -44,7 +44,7 @@
                     $salary = $row["job_salary"];
                     $bataswaktu = $row["apply_expire_date"];
                     $expire = date_create($bataswaktu);
-                    $queryapplicant = mysqli_query($con, "SELECT COUNT(*) AS applicants FROM applications WHERE id_job = '$id_job'");
+                    $queryapplicant = mysqli_query($con, "SELECT COUNT(*) AS applicants FROM applications INNER JOIN user ON applications.id_freelancer = user.id_user WHERE applications.id_job = '$id_job' AND user.flag = '1' AND applications.flag = '1'");
                     $rowapplicant = mysqli_fetch_assoc($queryapplicant);
                     $applicants = $rowapplicant['applicants'];
         ?>

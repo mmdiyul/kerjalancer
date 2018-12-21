@@ -6,7 +6,13 @@
     $id_job = $_GET["id"];
 
     if (isset($_SESSION['username']) && isset($_SESSION['level'])) {
-        
+        if ($_SESSION['level'] == '1') {
+            header("Location: ./administrator.php");
+        } else if ($_SESSION['level'] == '2') {
+            header("Location: ./client.php");
+        } 
+    } else {
+        header("Location: ./index.php");
     }
 ?>
 <!DOCTYPE html>
@@ -40,10 +46,11 @@
             $deskripsi = $row["job_description"];
             $salary = $row["job_salary"];
             $namaclient = $row["name"];
+            $idclient = $row["id_user"];
             $fotoclient = $row["profile_picture"];
-            $queryapplicant = mysqli_query($con, "SELECT COUNT(*) AS applicants FROM applications WHERE id_job = '$id_job'");
+            $queryapplicant = mysqli_query($con, "SELECT COUNT(*) AS applicants FROM applications INNER JOIN user ON applications.id_freelancer = user.id_user WHERE applications.id_job = '$id_job' AND user.flag = '1' AND applications.flag = '1'");
             $rowapplicant = mysqli_fetch_assoc($queryapplicant);
-            $checkapplicant = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM applications WHERE id_job = '$id_job' AND id_freelancer = '$id_user'"));
+            $checkapplicant = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM applications WHERE id_job = '$id_job' AND id_freelancer = '$id_user' AND flag = '1'"));
             $applicants = $rowapplicant['applicants'];
             $idjobapplicant = $checkapplicant['id_job'];
             $iduserapplicant = $checkapplicant['id_freelancer'];
@@ -72,6 +79,12 @@
                                 <button class="btn btn-warning">
                                     <i class="fas fa-edit mr-2"></i>
                                     Edit Lamaran
+                                </button>
+                            </a>
+                            <a href="#" class="link-decoration" data-toggle="modal" data-target="#hapusLamaran">
+                                <button class="btn btn-danger ml-3">
+                                    <i class="fas fa-trash mr-2"></i>
+                                    Batalkan Lamaran
                                 </button>
                             </a>
                 <?php
@@ -141,7 +154,9 @@
                 <hr>
                 <div class="row d-flex flex-column justify-content-center align-items-center">
                     <img src="<?=$fotoclient?>" alt="Gambar Category" class="rounded-circle mb-3" style="width: 120px; height: 120px;">
-                    <h5><?=$namaclient?></h5>
+                    <h5>
+                        <a href="./lihat-profil.php?id=<?=$idclient?>" class="link-decoration"><?=$namaclient?></a>
+                    </h5>
                     <small>Terdaftar di Kerjalancer pada :</small>
                     <span class="text-success"><?=$dateuser->format('D, d M Y')?></span>
                 </div>
@@ -149,22 +164,42 @@
             <div class="container-fluid shadow bg-white p-4 mt-4">
                 <h5>Pelamar</h5>
                 <hr>
+                <span class="text-primary">*) Warna biru berarti diterima</span><br>
+                <span class="text-danger">*) Warna merah berarti tidak/belum diterima</span>
                 <table class="table">
                     <tbody>
                     <?php
-                        $queryambiluser = mysqli_query($con, "SELECT a.*, j.*, u.* FROM ((applications AS a INNER JOIN job AS j ON a.id_job = j.id_job) INNER JOIN user AS u ON a.id_freelancer = u.id_user) WHERE a.id_job = '$id_job'");
+                        $queryambiluser = mysqli_query($con, "SELECT a.*, j.*, u.* FROM ((applications AS a INNER JOIN job AS j ON a.id_job = j.id_job) INNER JOIN user AS u ON a.id_freelancer = u.id_user) WHERE a.id_job = '$id_job' AND u.flag = '1' AND a.flag = '1'");
                         $numbering = 1;
                         if (mysqli_num_rows($queryambiluser)) {
                             while ($ambiluser = mysqli_fetch_assoc($queryambiluser)) {
                                 $foto = $ambiluser["profile_picture"];
                                 $nama = $ambiluser["name"];
+                                $id = $ambiluser["id_user"];
+                                $idlamaran = $ambiluser["id_applications"];
+                                $accepted = $ambiluser["accepted"];
+                                if ($accepted == 1) {
                     ?>
-                        <tr>
-                            <td scope="col"><?=$numbering++?></td>
-                            <td scope="col"><img src="<?=$foto?>" alt="Foto Freelancer" width="20px"></td>
-                            <td><?=$nama?></td>
-                        </tr>
+                                    <tr class="text-primary">
+                                        <td scope="col"><?=$numbering++?></td>
+                                        <td scope="col"><img src="<?=$foto?>" alt="Foto Freelancer" width="20px"></td>
+                                        <td>
+                                            <a href="./lihat-profil.php?id=<?=$id?>" class="link-decoration"><?=$nama?></a>    
+                                        </td>
+                                    </tr>
                     <?php
+                                } else {
+                    ?>
+
+                                    <tr class="text-danger">
+                                        <td scope="col"><?=$numbering++?></td>
+                                        <td scope="col"><img src="<?=$foto?>" alt="Foto Freelancer" width="20px"></td>
+                                        <td>
+                                            <a href="./lihat-profil.php?id=<?=$id?>" class="link-decoration text-danger"><?=$nama?></a>    
+                                        </td>
+                                    </tr>
+                    <?php
+                                }
                             }
                         }
                     ?>
@@ -254,6 +289,32 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                         <input type="submit" name='submit' class="btn btn-primary" value="Simpan Perubahan">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Hapus -->
+    <div class="modal fade" id="hapusLamaran" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <form action="./process/hapus-lamaran-process.php" method="post" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Batalkan Lamaran</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <input type="hidden" name="idlamaran" value="<?=$idlamaran?>">
+                            Anda yakin ingin membatalkan lamaran Anda?
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <input type="submit" name='submit' class="btn btn-danger" value="Batalkan Lamaran">
                     </div>
                 </form>
             </div>

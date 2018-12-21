@@ -29,6 +29,13 @@
                         <h5><?=$nama?></h5>
                     </div>
                     <div class="col-9 border-left">
+                        <div class="w-100 d-flex justify-content-end">
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#hapusAkun">
+                                <i class="fas fa-trash mr-2"></i>
+                                Hapus Akun
+                            </button>
+                        </div>
+                        <hr>
                         <div class="row mt-3">
                             <div class="col-3">
                                 <strong>Username</strong>
@@ -79,6 +86,30 @@
             </form>
         </div>
         <div class="col-2"></div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="hapusAkun" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Konfirmasi Hapus Akun</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    Apakah Anda yakin akan <strong class="text-danger">menghapus akun</strong> Anda?
+                </div>
+                <div class="modal-footer">
+                    <form action="./process/hapus-akun-process.php" method="post">
+                        <input type="hidden" name="id" value="<?=$id_profil?>">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Batal</button>
+                        <input type="submit" name="submit" class="btn btn-danger" value="Hapus Akun">
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <?php include './lib/footer.php' ?>

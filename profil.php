@@ -170,11 +170,13 @@
                                 <label for="biodata" class="col-2 text-right">Biodata</label>
                                 <textarea class="form-control col-10" name="biodata" id="biodata" rows="10" required><?=$desc?></textarea>
                             </div>
+                            <?php
+                                if ($_SESSION["level"] == 3) {
+                            ?>
                             <div class="form-group row">
                                 <label for="skill" class="col-2 text-right">Skill</label>
                                 <div class="col-10 form-control" style="height:200px; overflow-y: scroll;">
                             <?php
-                                if ($_SESSION["level"] == 3) {
                                     $queryselectskill = mysqli_query($con, "SELECT s.*, us.id_user, us.id_skill AS idskill FROM skill AS s LEFT JOIN user_has_skills AS us ON us.id_skill = s.id_skill AND us.id_user = '$id_user'");
                                     while ($rowskill = mysqli_fetch_assoc($queryselectskill)) {
                                         $idskill = $rowskill["id_skill"];
@@ -184,10 +186,12 @@
                                             <input type="checkbox" name="skill[]" id="skill" value="<?=$idskill?>" <?=$rowskill["idskill"] == $idskill && $user == $id_user ? 'checked="checked"' : '';?>> <?=$namaskill?> <br>
                             <?php
                                     }
-                                }
                             ?>
                                 </div>
                             </div>
+                            <?php
+                                }
+                            ?>
                             <div class="form-group row">
                                 <label for="foto" class="col-2 text-right">Foto Profil</label>
                                 <div class="col-10">

@@ -3,8 +3,8 @@
 
     session_start();
 
-    $id = $_POST["id"];
-    echo $id;
+    $id = $_GET["id"];
+    // echo $id;
 
     if (!isset($_SESSION['username']) && !isset($_SESSION['level'])) {
         
@@ -25,10 +25,10 @@
             <hr>
             <div class="row mt-5">
             <?php
-                if (isset($_POST["submit"])) {
-                    $queryportfolio = mysqli_query($con, "SELECT * FROM portfolio WHERE id_user = '$id'");
+                if (isset($_GET["submit"])) {
+                    $queryportfolio = mysqli_query($con, "SELECT p.* FROM portfolio AS p INNER JOIN user AS u ON p.id_user = u.id_user WHERE p.id_user = '$id' AND p.flag = '1'");
                 } else {
-                    $queryportfolio = mysqli_query($con, "SELECT * FROM portfolio");
+                    $queryportfolio = mysqli_query($con, "SELECT p.* FROM portfolio AS p INNER JOIN user AS u ON p.id_user = u.id_user WHERE p.flag = '1'");
                 }
 
                 if (mysqli_num_rows($queryportfolio) > 0) {
@@ -66,7 +66,8 @@
                                         </p>
                                         <p class="text-left"><?=$descportfolio?></p>
                                         <p>
-                                            <strong>Diupload oleh: </strong><?=$nama?>
+                                            <strong>Diupload oleh: </strong>
+                                            <a href="./lihat-profil.php?id=<?=$iduseruploader?>" class="link-decoration"><?=$nama?></a>
                                         </p>
                                     </div>
                                 </div>

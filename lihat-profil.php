@@ -20,7 +20,7 @@
         <div class="col-2"></div>
         <div class="col-8 border shadow w-100 p-4 mt-4 mb-4 bg-white">
             <?php
-                $resultuser = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM user WHERE id_user = '$iduser'"));
+                $resultuser = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM user WHERE id_user = '$iduser' AND flag = '1'"));
                 $profile_picture = $resultuser["profile_picture"];
                 $nama = $resultuser["name"];
                 $username = $resultuser["username"];
@@ -42,7 +42,7 @@
                 <div class="col-9 border-left">
                     <div class="w-100 d-flex justify-content-end">
                         <!-- <a href="./portfolio.php?id=<?=$iduser?>" class="link-decoration"></a> -->
-                        <form action="./portfolio.php" method="post">
+                        <form action="./portfolio.php?id=<?=$iduser?>" method="get">
                             <input type="hidden" name="id" value="<?=$iduser?>">
                             <input type="submit" name="submit" class="btn btn-outline-primary" value="Lihat Portfolio">
                         </form>

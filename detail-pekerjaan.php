@@ -41,7 +41,7 @@
             $salary = $row["job_salary"];
             $namaclient = $row["name"];
             $fotoclient = $row["profile_picture"];
-            $queryapplicant = mysqli_query($con, "SELECT COUNT(*) AS applicants FROM applications WHERE id_job = '$id_job'");
+            $queryapplicant = mysqli_query($con, "SELECT COUNT(*) AS applicants FROM applications INNER JOIN user ON applications.id_freelancer = user.id_user WHERE applications.id_job = '$id_job' AND user.flag = '1' AND applications.flag = '1'");
             $rowapplicant = mysqli_fetch_assoc($queryapplicant);
             $checkapplicant = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM applications WHERE id_job = '$id_job' AND id_freelancer = '$id_user'"));
             $applicants = $rowapplicant['applicants'];
@@ -120,7 +120,7 @@
                 <hr>
                 <div class="row d-flex flex-column justify-content-center align-items-center">
                     <img src="<?=$fotoclient?>" alt="Gambar Category" class="rounded-circle mb-3" style="width: 120px; height: 120px;">
-                    <h5><?=$namaclient?></h5>
+                    <a href="./lihat-profil.php?id=<?=$idclient?>" class="link-decoration"><?=$namaclient?></a>
                     <small>Terdaftar di Kerjalancer pada :</small>
                     <span class="text-success"><?=$dateuser->format('D, d M Y')?></span>
                 </div>
@@ -128,15 +128,18 @@
             <div class="container-fluid shadow bg-white p-4 mt-4">
                 <h5>Pelamar</h5>
                 <hr>
+                <span class="text-primary">*) Warna biru berarti diterima</span><br>
+                <span class="text-danger">*) Warna merah berarti tidak/belum diterima</span>
                 <table class="table">
                     <tbody>
                     <?php
-                        $queryambiluser = mysqli_query($con, "SELECT a.*, j.*, u.* FROM ((applications AS a INNER JOIN job AS j ON a.id_job = j.id_job) INNER JOIN user AS u ON a.id_freelancer = u.id_user) WHERE a.id_job = '$id_job'");
+                        $queryambiluser = mysqli_query($con, "SELECT a.*, j.*, u.* FROM ((applications AS a INNER JOIN job AS j ON a.id_job = j.id_job) INNER JOIN user AS u ON a.id_freelancer = u.id_user) WHERE a.id_job = '$id_job' AND u.flag = '1' AND a.flag = '1'");
                         $numbering = 1;
                         if (mysqli_num_rows($queryambiluser)) {
                             while ($ambiluser = mysqli_fetch_assoc($queryambiluser)) {
                                 $foto = $ambiluser["profile_picture"];
                                 $nama = $ambiluser["name"];
+                                $id = $ambiluser["id_user"];
                                 $idlamaran = $ambiluser["id_applications"];
                                 $accepted = $ambiluser["accepted"];
                                 if ($accepted == 1) {
@@ -144,7 +147,9 @@
                                     <tr class="text-primary">
                                         <td scope="col"><?=$numbering++?></td>
                                         <td scope="col"><img src="<?=$foto?>" alt="Foto Freelancer" width="20px"></td>
-                                        <td><?=$nama?></td>
+                                        <td>
+                                            <a href="./lihat-profil.php?id=<?=$id?>" class="link-decoration"><?=$nama?></a>    
+                                        </td>
                                     </tr>
                     <?php
                                 } else {
@@ -153,7 +158,9 @@
                                     <tr class="text-danger">
                                         <td scope="col"><?=$numbering++?></td>
                                         <td scope="col"><img src="<?=$foto?>" alt="Foto Freelancer" width="20px"></td>
-                                        <td><?=$nama?></td>
+                                        <td>
+                                            <a href="./lihat-profil.php?id=<?=$id?>" class="link-decoration text-danger"><?=$nama?></a>    
+                                        </td>
                                     </tr>
                     <?php
                                 }

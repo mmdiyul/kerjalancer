@@ -9,7 +9,7 @@ if(!empty($_POST["username"]) || !empty($_POST["password"])) {
     $password = $_POST["password"];
 
     # Write MySql Query
-    $query = "SELECT * FROM user WHERE (username='$username' OR email='$username') AND password='$password'";
+    $query = "SELECT * FROM user WHERE (username='$username' OR email='$username') AND password='$password' AND flag='1'";
     # Get the query result
     $result = mysqli_query($con, $query);
 

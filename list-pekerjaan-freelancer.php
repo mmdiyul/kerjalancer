@@ -24,7 +24,7 @@
     <div class="row">
         <div class="col-8 pt-5 pl-5 pb-5 pr-4">
         <?php
-            $query = "SELECT a.*, j.*, c.*, u.* FROM (((applications AS a INNER JOIN job AS j ON a.id_job = j.id_job) INNER JOIN category AS c ON j.id_category = c.id_category) INNER JOIN user AS u ON j.id_user = u.id_user) WHERE a.id_freelancer = '$id_user'";
+            $query = "SELECT a.*, j.*, c.*, u.* FROM (((applications AS a INNER JOIN job AS j ON a.id_job = j.id_job) INNER JOIN category AS c ON j.id_category = c.id_category) INNER JOIN user AS u ON j.id_user = u.id_user) WHERE a.id_freelancer = '$id_user' AND u.flag = '1' AND j.flag = '1' AND a.flag = '1'";
             // $query = "SELECT a.*, j.*, c.*, u.* FROM ((job AS j INNER JOIN category AS c ON j.id_category = c.id_category) INNER JOIN user AS u ON j.id_user = u.id_user) WHERE j.id_user = '$id_user'";
             $result = mysqli_query($con, $query);
 
@@ -41,7 +41,7 @@
                     $salary = $row["job_salary"];
                     $bataswaktu = $row["apply_expire_date"];
                     $expire = date_create($bataswaktu);
-                    $queryapplicant = mysqli_query($con, "SELECT COUNT(*) AS applicants FROM applications WHERE id_job = '$id_job'");
+                    $queryapplicant = mysqli_query($con, "SELECT COUNT(*) AS applicants FROM applications INNER JOIN user ON applications.id_freelancer = user.id_user WHERE applications.id_job = '$id_job' AND user.flag = '1' AND applications.flag = '1'");
                     $rowapplicant = mysqli_fetch_assoc($queryapplicant);
                     $applicants = $rowapplicant['applicants'];
         ?>

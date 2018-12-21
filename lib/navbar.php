@@ -21,9 +21,9 @@
 
 
             if ($level == 1) {
-                // header("Location: administrator/index.php");
+                header("Location: ./administrator/");
         ?>
-                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <!-- <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="./administrator.php">Dashboard</a>
                     </li>
@@ -66,7 +66,7 @@
                             </a>
                         </div>
                     </li>
-                </ul>
+                </ul> -->
         <?php
             } else if ($level == 2) {
         ?>
@@ -98,7 +98,7 @@
                             <img src="<?php echo $profile_picture; ?>" class="rounded rounded-circle" alt="foto profil" height="23px">
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownId">
-                            <a class="dropdown-item" href="./profil.php">
+                            <a class="dropdown-item" href="./profil.php?id=<?=$id_user?>">
                                 <div class="row">
                                     <div class="col-3">
                                         <i class="fas fa-user"></i>
@@ -166,7 +166,7 @@
                             <img src="<?php echo $profile_picture; ?>" class="rounded rounded-circle" alt="foto profil" height="23px">
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownId">
-                            <a class="dropdown-item" href="./profil.php">
+                            <a class="dropdown-item" href="./profil.php?id=<?=$id_user?>">
                                 <div class="row">
                                     <div class="col-3">
                                         <i class="fas fa-user"></i>

@@ -27,7 +27,7 @@
         <div class="col-8 pt-5 pl-5 pb-5 pr-4">
             <div class="container-fluid shadow bg-white p-4">
             <?php
-                $selectpelamar = mysqli_query($con, "SELECT a.*, u.* FROM applications AS a INNER JOIN user AS u ON a.id_freelancer = u.id_user WHERE a.id_job = '$id_job'");
+                $selectpelamar = mysqli_query($con, "SELECT a.*, u.* FROM applications AS a INNER JOIN user AS u ON a.id_freelancer = u.id_user WHERE a.id_job = '$id_job' AND u.flag = '1' AND a.flag = '1'");
 
                 if (mysqli_num_rows($selectpelamar) > 0) {
             ?>
@@ -55,14 +55,16 @@
                                 $dokumen = $selectlamaran['document'];
                                 $accepted = $selectlamaran['accepted'];
                                 $numbering++;
-                                $skillcocok = mysqli_query($con, "SELECT us.*, js.* FROM user_has_skills AS us INNER JOIN job_has_skills AS js ON us.id_skill = js.id_skill WHERE js.id_job = '$id_job' AND us.id_user = '$id_pelamar'");
+                                // $skillcocok = mysqli_query($con, "SELECT us.*, js.* FROM user_has_skills AS us INNER JOIN job_has_skills AS js ON us.id_skill = js.id_skill WHERE js.id_job = '$id_job' AND us.id_user = '$id_pelamar'");
                         ?>
                                 <form action="./process/terima-tolak-lamaran-process.php" method="post">
                                     <tr>
                                         <input type="hidden" name="idlamaran" value="<?=$idlamaran?>">
                                         <input type="hidden" name="idjob" value="<?=$id_job?>">
                                         <th scope="row"><?=$numbering?></th>
-                                        <td><?=$namapelamar?></td>
+                                        <td>
+                                            <a href="./lihat-profil.php?id=<?=$id_pelamar?>" class="link-decoration" target="_blank"><?=$namapelamar?></a>
+                                        </td>
                                         <td>
                                             <a href="<?=$dokumen?>" class="link-decoration" target="_blank">Lihat dokumen</a>
                                         </td>
